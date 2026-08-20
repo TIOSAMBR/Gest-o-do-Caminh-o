@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestão do Caminhão</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div>
+        <h1>🚚 Gestão do Caminhão</h1>
+        <p>Controle de custos, fretes e lucro</p>
+    </div>
+
+    <button
+        class="theme-toggle"
+        id="themeToggle"
+        onclick="alternarTema()">
+        🌙 Modo escuro
+    </button>
+
+</header>
+
+
+<main class="container">
+
+
+    <!-- =====================================
+         PAINEL PRINCIPAL
+    ====================================== -->
+
+    <section class="panel dashboard-panel">
+
+        <div class="panel-header main-dashboard-header">
+
+            <div>
+                <h2>📊 Resumo do mês</h2>
+                <p>Visualize o resultado financeiro do período selecionado.</p>
+            </div>
+
+            <div class="month-selector">
+
+                <label for="mesPrincipal">
+                    Mês
+                </label>
+
+                <input
+                    type="month"
+                    id="mesPrincipal">
+
+            </div>
+
+        </div>
+
+        <section class="current-month-header">
+
+    <div>
+        <h2>📅 Resumo do mês</h2>
+        <p id="mesAtualNome">Agosto/2026</p>
+    </div>
+
+</section>
+
+
+        <section class="dashboard">
+
+            <div class="card">
+                <span>💰 Faturamento</span>
+                <strong id="totalFaturamento">
+                    R$ 0,00
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>🚚 Custos dos fretes</span>
+                <strong id="totalCustosFretes">
+                    R$ 0,00
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>🔧 Despesas gerais</span>
+                <strong id="totalDespesas">
+                    R$ 0,00
+                </strong>
+            </div>
+
+
+            <div class="card lucro">
+                <span>🟢 Lucro real</span>
+                <strong id="totalLucro">
+                    R$ 0,00
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>📈 Margem</span>
+                <strong id="margemMedia">
+                    0%
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>🚚 KM rodados</span>
+                <strong id="totalKm">
+                    0 km
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>💵 Lucro por KM</span>
+                <strong id="lucroPorKm">
+                    R$ 0,00
+                </strong>
+            </div>
+
+
+            <div class="card">
+                <span>📦 Fretes</span>
+                <strong id="totalFretes">
+                    0
+                </strong>
+            </div>
+
+        </section>
+
+    </section>
+
+
+
+    <!-- =====================================
+         CONFIGURAÇÃO
+    ====================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+                <h2>⚙️ Configuração do caminhão</h2>
+
+                <p>
+                    Esses valores são utilizados nos cálculos dos fretes.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>
+                    Consumo médio (km/l)
+                </label>
+
+                <input
+                    type="number"
+                    id="consumo"
+                    step="0.01"
+                    placeholder="Ex.: 7">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Preço do diesel (R$/litro)
+                </label>
+
+                <input
+                    type="number"
+                    id="diesel"
+                    step="0.01"
+                    placeholder="Ex.: 6.20">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Manutenção mensal estimada
+                </label>
+
+                <input
+                    type="number"
+                    id="manutencao"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Seguro mensal
+                </label>
+
+                <input
+                    type="number"
+                    id="seguro"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    IPVA + licenciamento anual
+                </label>
+
+                <input
+                    type="number"
+                    id="ipva"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Pneus / outros custos mensais
+                </label>
+
+                <input
+                    type="number"
+                    id="pneus"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="btn primary"
+            onclick="salvarConfiguracao()">
+
+            💾 Salvar configuração
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =====================================
+         NOVO FRETE
+    ====================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    📦 Registrar novo frete
+                </h2>
+
+                <p>
+                    Informe os dados da viagem.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>Data</label>
+
+                <input
+                    type="date"
+                    id="data">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Cliente</label>
+
+                <input
+                    type="text"
+                    id="cliente"
+                    placeholder="Nome do cliente">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Origem</label>
+
+                <input
+                    type="text"
+                    id="origem"
+                    placeholder="Morrinhos - GO">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Destino</label>
+
+                <input
+                    type="text"
+                    id="destino"
+                    placeholder="Goiânia - GO">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>KM total da viagem</label>
+
+                <input
+                    type="number"
+                    id="km"
+                    step="0.1"
+                    placeholder="Ex.: 350">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Valor cobrado</label>
+
+                <input
+                    type="number"
+                    id="valorFrete"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Pedágios</label>
+
+                <input
+                    type="number"
+                    id="pedagio"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Ajudantes</label>
+
+                <input
+                    type="number"
+                    id="ajudantes"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Alimentação / diária</label>
+
+                <input
+                    type="number"
+                    id="alimentacao"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Outras despesas</label>
+
+                <input
+                    type="number"
+                    id="outrasDespesas"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+        </div>
+
+
+        <div class="preview">
+
+            <div>
+
+                <span>Combustível</span>
+
+                <strong id="previewCombustivel">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Custos do frete</span>
+
+                <strong id="previewCustos">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Lucro do frete</span>
+
+                <strong id="previewLucro">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Margem</span>
+
+                <strong id="previewMargem">
+                    0%
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="btn success"
+            onclick="registrarFrete()">
+
+            ➕ Registrar frete
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =====================================
+         DESPESA AVULSA
+    ====================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    🔧 Registrar despesa do caminhão
+                </h2>
+
+                <p>
+                    Registre gastos que não pertencem a um frete específico.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>
+                    Data
+                </label>
+
+                <input
+                    type="date"
+                    id="dataDespesa">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Tipo de despesa
+                </label>
+
+                <select id="tipoDespesa">
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="Manutenção">
+                        🔧 Manutenção
+                    </option>
+
+                    <option value="Lavagem">
+                        🧼 Lavagem
+                    </option>
+
+                    <option value="Pneus">
+                        🛞 Pneus
+                    </option>
+
+                    <option value="Troca de óleo">
+                        🛢️ Troca de óleo
+                    </option>
+
+                    <option value="Peças">
+                        🔩 Peças
+                    </option>
+
+                    <option value="Documentação">
+                        🧾 Documentação
+                    </option>
+
+                    <option value="Abastecimento">
+                        ⛽ Abastecimento
+                    </option>
+
+                    <option value="Multa">
+                        ⚠️ Multa
+                    </option>
+
+                    <option value="Outros">
+                        📦 Outros
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Descrição
+                </label>
+
+                <input
+                    type="text"
+                    id="descricaoDespesa"
+                    placeholder="Ex.: Troca de óleo">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Valor
+                </label>
+
+                <input
+                    type="number"
+                    id="valorDespesa"
+                    step="0.01"
+                    placeholder="R$">
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="btn warning"
+            onclick="registrarDespesa()">
+
+            ➕ Registrar despesa
+
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+     COMPARAÇÃO ENTRE MESES
+===================================================== -->
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+            <h2>📈 Comparação entre meses</h2>
+
+            <p>
+                Compare o desempenho financeiro do caminhão.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="comparison-selectors">
+
+        <div class="field">
+
+            <label>
+                Mês atual
+            </label>
+
+            <input
+                type="month"
+                id="mesComparacao1"
+            >
+
+        </div>
+
+
+        <div class="comparison-vs">
+            VS
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Comparar com
+            </label>
+
+            <input
+                type="month"
+                id="mesComparacao2"
+            >
+
+        </div>
+
+    </div>
+
+
+    <div class="comparison-table-container">
+
+        <table class="comparison-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Indicador
+                    </th>
+
+                    <th id="tituloMes1">
+                        Mês 1
+                    </th>
+
+                    <th id="tituloMes2">
+                        Mês 2
+                    </th>
+
+                    <th>
+                        Diferença
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        💰 Faturamento
+                    </td>
+
+                    <td id="comparacaoFaturamento1">
+                        R$ 0,00
+                    </td>
+
+                    <td id="comparacaoFaturamento2">
+                        R$ 0,00
+                    </td>
+
+                    <td id="diferencaFaturamento">
+                        -
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        💸 Custos
+                    </td>
+
+                    <td id="comparacaoCustos1">
+                        R$ 0,00
+                    </td>
+
+                    <td id="comparacaoCustos2">
+                        R$ 0,00
+                    </td>
+
+                    <td id="diferencaCustos">
+                        -
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        🟢 Lucro
+                    </td>
+
+                    <td id="comparacaoLucro1">
+                        R$ 0,00
+                    </td>
+
+                    <td id="comparacaoLucro2">
+                        R$ 0,00
+                    </td>
+
+                    <td id="diferencaLucro">
+                        -
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        🚛 KM rodados
+                    </td>
+
+                    <td id="comparacaoKm1">
+                        0 km
+                    </td>
+
+                    <td id="comparacaoKm2">
+                        0 km
+                    </td>
+
+                    <td id="diferencaKm">
+                        -
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        📦 Fretes realizados
+                    </td>
+
+                    <td id="comparacaoFretes1">
+                        0
+                    </td>
+
+                    <td id="comparacaoFretes2">
+                        0
+                    </td>
+
+                    <td id="diferencaFretes">
+                        -
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        📊 Margem
+                    </td>
+
+                    <td id="comparacaoMargem1">
+                        0%
+                    </td>
+
+                    <td id="comparacaoMargem2">
+                        0%
+                    </td>
+
+                    <td id="diferencaMargem">
+                        -
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div
+        id="resumoComparacao"
+        class="comparison-result"
+    >
+        Selecione os meses para visualizar a comparação.
+    </div>
+
+</section>
+
+
+
+    <!-- =====================================
+         ANÁLISE MENSAL
+    ====================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    📊 Análise mensal
+                </h2>
+
+                <p>
+                    Análise detalhada do mês selecionado.
+                </p>
+
+            </div>
+
+            <div class="month-selector">
+
+                <label>
+                    Período
+                </label>
+
+                <input
+                    type="month"
+                    id="mesAnalise">
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard monthly-dashboard">
+
+            <div class="card">
+
+                <span>
+                    Faturamento
+                </span>
+
+                <strong id="mesFaturamento">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    Custos dos fretes
+                </span>
+
+                <strong id="mesCustosFretes">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    Despesas gerais
+                </span>
+
+                <strong id="mesDespesas">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+
+            <div class="card lucro">
+
+                <span>
+                    Lucro real
+                </span>
+
+                <strong id="mesLucro">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    Margem
+                </span>
+
+                <strong id="mesMargem">
+                    0%
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    KM rodados
+                </span>
+
+                <strong id="mesKm">
+                    0 km
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    Fretes realizados
+                </span>
+
+                <strong id="mesQuantidade">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <span>
+                    Lucro por KM
+                </span>
+
+                <strong id="mesLucroKm">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="monthly-content">
+
+
+            <!-- GRÁFICO -->
+
+            <div class="chart-box">
+
+                <h3>
+                    Desempenho do mês
+                </h3>
+
+                <div class="chart">
+
+                    <div class="bar-group">
+
+                        <div class="bar-container">
+
+                            <div
+                                class="bar faturamento-bar"
+                                id="barFaturamento">
+                            </div>
+
+                            <span>
+                                Faturamento
+                            </span>
+
+                        </div>
+
+
+                        <div class="bar-container">
+
+                            <div
+                                class="bar custo-bar"
+                                id="barCustos">
+                            </div>
+
+                            <span>
+                                Custos
+                            </span>
+
+                        </div>
+
+
+                        <div class="bar-container">
+
+                            <div
+                                class="bar despesa-bar"
+                                id="barDespesas">
+                            </div>
+
+                            <span>
+                                Despesas
+                            </span>
+
+                        </div>
+
+
+                        <div class="bar-container">
+
+                            <div
+                                class="bar lucro-bar"
+                                id="barLucro">
+                            </div>
+
+                            <span>
+                                Lucro
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RANKING -->
+
+            <div class="ranking-box">
+
+                <h3>
+                    🏆 Fretes mais lucrativos
+                </h3>
+
+                <div id="rankingFretes">
+
+                    <p class="empty">
+                        Nenhum frete neste mês.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         HISTÓRICO DE FRETES
+    ====================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header history-header">
+
+            <div>
+
+                <h2>
+                    📋 Histórico de fretes
+                </h2>
+
+                <p>
+                    Todos os fretes registrados.
+                </p>
+
+            </div>
+
+
+            <button
+                class="btn secondary"
+                onclick="exportarCSV()">
+
+                📥 Exportar CSV
+
+            </button>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Origem</th>
+                        <th>Destino</th>
+                        <th>KM</th>
+                        <th>Receita</th>
+                        <th>Custo</th>
+                        <th>Lucro</th>
+                        <th>Margem</th>
+                        <th>Ação</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="tabelaFretes">
+                </tbody>
+
+            </table>
+
+
+            <div
+                id="semFretes"
+                class="empty">
+
+                Nenhum frete registrado ainda.
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         HISTÓRICO DE DESPESAS
+    ====================================== -->
+
+    <section class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    🧾 Histórico de despesas
+                </h2>
+
+                <p>
+                    Despesas independentes dos fretes.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Data</th>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Ação</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="tabelaDespesas">
+                </tbody>
+
+            </table>
+
+
+            <div
+                id="semDespesas"
+                class="empty">
+
+                Nenhuma despesa registrada.
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    Gestão do Caminhão © 2026
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
